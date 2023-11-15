@@ -1,14 +1,11 @@
 package main
 
 import (
+	"example-crud/controllers"
 	"example-crud/initializers"
 
 	"github.com/gin-gonic/gin"
 )
-
-var ninjaWeapons = map[string]string{
-	"ninjaStar": "Beginner Ninja Star - Damage 1",
-}
 
 func init() {
   initializers.LoadEnvVariables()
@@ -17,22 +14,13 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pongo",
-		})
-	})
 
-	r.GET("/weapon", GetWeapon)
+  r.GET("/posts", controllers.PostsIndex)
+  r.GET("/posts/:id", controllers.PostsShow)
+	r.POST("/posts", controllers.PostsCreate)
+  r.PUT("/posts/:id", controllers.PostsUpdate)
+  r.DELETE("/posts/:id", controllers.PostsDelete)
 
 	r.Run()
 }
 
-func GetWeapon(c *gin.Context) {
-	weaponType := c.Query("type")
-	name := c.Query("name")
-	c.JSON(200, gin.H{
-		"weapon": ninjaWeapons[weaponType],
-		"name":   name,
-	})
-}
